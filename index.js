@@ -1,13 +1,14 @@
 'use strict';
-// require('dotenv').config();
+require('dotenv').config();
 const http = require('http');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 
-// keys
-// const SAMPLE_API_KEY = 'rtgwq'
+// env keys
+const TMP_FILE_DIR = process.env.TMP_FILE_DIR
 
 const app = express();
 
@@ -29,6 +30,19 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
+/**
+ * On boot, one time attempt to sychronously create tmp directory for file uploads
+ */
+try {
+  const tmpDirExists = fs.existsSync(TMP_FILE_DIR)
+  // console.log('app start: tmpDirExists:', tmpDirExists);
+  if (!tmpDirExists) {
+    console.log('app start: make tmp dir')
+    fs.mkdirSync(TMP_FILE_DIR)
+  }
+} catch (e) {
+  // do nothing
+}
 
 // Router
 app.use('/api/v1', require('./routes/v1'));
@@ -56,7 +70,7 @@ process.on('uncaughtException', (err) => {
   console.error('uncaughtException:', err);
 });
 process.on('unhandledRejection', (err) => {
-  console.log('unhandledRejection:', err);
+  console.error('unhandledRejection:', err);
 });
 
 

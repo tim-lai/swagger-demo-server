@@ -1,6 +1,7 @@
 # env
 .env
 .DS_Store
+tmp
 
 # dependencies
 node_modules
