@@ -12,8 +12,23 @@ const TMP_FILE_DIR = process.env.TMP_FILE_DIR
 
 const app = express();
 
+/**
+ * On boot, one time attempt to sychronously create tmp directory for file uploads
+ */
+try {
+  const tmpDirExists = fs.existsSync(TMP_FILE_DIR)
+  // console.log('app start: tmpDirExists:', tmpDirExists);
+  if (!tmpDirExists) {
+    console.log('app start: make tmp dir')
+    fs.mkdirSync(TMP_FILE_DIR)
+  }
+} catch (e) {
+  // do nothing
+}
+
 // to secure the headers
 app.use(helmet())
+
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 
@@ -29,20 +44,18 @@ app.use(cors({
   },
   optionsSuccessStatus: 200
 }));
-
-/**
- * On boot, one time attempt to sychronously create tmp directory for file uploads
- */
-try {
-  const tmpDirExists = fs.existsSync(TMP_FILE_DIR)
-  // console.log('app start: tmpDirExists:', tmpDirExists);
-  if (!tmpDirExists) {
-    console.log('app start: make tmp dir')
-    fs.mkdirSync(TMP_FILE_DIR)
-  }
-} catch (e) {
-  // do nothing
-}
+// app.all('/*', (req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Request-Headers', '*');
+//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Authorization');
+//   res.header('Access-Control-Allow-Methods', 'GET, POST');
+//   if(req.method === 'OPTIONS') {
+//     res.writeHead(200);
+//     res.end();
+//   } else {
+//     next();
+//   }
+// });
 
 // Router
 app.use('/api/v1', require('./routes/v1'));
