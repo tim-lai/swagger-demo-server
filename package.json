@@ -1,6 +1,6 @@
 {
   "name": "swagger-demo-server",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Demo server to test Swagger projects",
   "author": "Tim Lai",
   "license": "MIT",

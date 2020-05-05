@@ -1,4 +1,4 @@
-# Express scaffold that is ready for Create React App
+# Express boilerplate that is ready for Create React App
 
 ## Features
 - Watch for dev changes, via nodemon
@@ -10,3 +10,6 @@
 
 ## Start server (watch with nodemon):
 ### `npm start`
+
+## License
+View the [LICENSE](https://github.com/tim-lai/swagger-demo-server/blob/master/LICENSE) file (MIT)  
